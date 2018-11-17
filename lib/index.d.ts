@@ -57,6 +57,13 @@ declare namespace josie {
 
     boolean(): Builder;
 
+    number(): Builder;
+    multipleOf(value: number): Builder;
+    maximum(value: number): Builder;
+    exclusiveMaximum(value: number): Builder;
+    minimum(value: number): Builder;
+    exclusiveMinimum(value: number): Builder;
+
     array(items: Primitive | Schema | Primitive[] | Schema[]): Builder;
     items(value: Primitive | Schema | Primitive[] | Schema[]): Builder;
     maxItems(value: number): Builder;
