@@ -51,6 +51,12 @@ declare namespace josie {
     const(value: Primitive): Builder;
     default(value: any): Builder;
 
+    literal(value: Primitive): Builder;
+
+    null(): Builder;
+
+    boolean(): Builder;
+
     array(items: Primitive | Schema | Primitive[] | Schema[]): Builder;
     items(value: Primitive | Schema | Primitive[] | Schema[]): Builder;
     maxItems(value: number): Builder;
