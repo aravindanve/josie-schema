@@ -6,6 +6,10 @@ schema.type(schema.types.BOOLEAN);
 schema().type(schema.types.BOOLEAN);
 schema.type(schema.types.NUMBER);
 schema().type(schema.types.NUMBER);
+schema.type(schema.types.INTEGER);
+schema().type(schema.types.INTEGER);
+schema.type(schema.types.STRING);
+schema().type(schema.types.STRING);
 
 schema.literal(null);
 schema().literal(null);
