@@ -9,6 +9,7 @@ declare namespace josie {
     NUMBER = 'number',
     INTEGER = 'integer',
     STRING = 'string',
+    ARRAY = 'array',
     OBJECT = 'object'
   }
 
@@ -88,12 +89,20 @@ declare namespace josie {
     regex(): Builder;
     content(encoding: string, mediaType: string): Builder;
 
-    array(items: Primitive | Schema | Primitive[] | Schema[]): Builder;
-    items(value: Primitive | Schema | Primitive[] | Schema[]): Builder;
+    array(items?: Schema | Builder | Schema[] | Builder[]): Builder;
+    items(value: Schema | Builder | Schema[] | Builder[]): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
     uniqueItems(value: boolean): Builder;
-    contains(value: Schema): Builder;
+    contains(value: Schema | Builder): Builder;
+
+    object(properties?: { [k: string]: Schema | Builder }): Builder;
+    properties(value: { [k: string]: Schema | Builder }): Builder;
+    maxProperties(value: number): Builder;
+    minProperties(value: number): Builder;
+    patternProperties(value: { [k: string]: Schema | Builder }): Builder;
+    additionalProperties(value: boolean): Builder;
+    propertyNames(value: Schema | Builder): Builder;
   }
 
   export interface BuilderStatic extends PickTypes<Builder, Function> {
