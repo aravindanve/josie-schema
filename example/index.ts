@@ -34,3 +34,6 @@ schema.number().minimum(10);
 schema().number().minimum(10);
 schema.number().exclusiveMinimum(10);
 schema().number().exclusiveMinimum(10);
+
+schema.integer();
+schema().integer();
