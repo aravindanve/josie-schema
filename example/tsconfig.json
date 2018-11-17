@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "paths": {
+            "josie-schema": [
+                "../lib"
+            ]
+        }
+    }
+}

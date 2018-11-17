@@ -1,0 +1,52 @@
+{
+  "name": "josie-schema",
+  "version": "0.1.0",
+  "description": "JSON Schema Tools",
+  "main": "lib/index.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "nyc mocha 'lib/**/*.spec.js'",
+    "build:example": "tsc --project example/tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aravindanve/json-schema-builder.git"
+  },
+  "keywords": [
+    "json-schema",
+    "json-schema-tools",
+    "schema",
+    "json",
+    "builder",
+    "factory"
+  ],
+  "author": "Aravindanve <aravindan.ve@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aravindanve/json-schema-builder/issues"
+  },
+  "homepage": "https://github.com/aravindanve/json-schema-builder#readme",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "typescript": "^3.1.6"
+  },
+  "dependencies": {},
+  "types": "lib/index.d.ts",
+  "nyc": {
+    "include": [
+      "lib/**/*.js"
+    ],
+    "exclude": [
+      "lib/**/*.spec.js",
+      "lib/**/*.d.ts"
+    ],
+    "reporter": [
+      "text"
+    ],
+    "all": true
+  }
+}
