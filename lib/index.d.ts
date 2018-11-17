@@ -66,6 +66,28 @@ declare namespace josie {
 
     integer(): Builder;
 
+    string(): Builder;
+    format(value: FormatString): Builder;
+    pattern(value: string | RegExp): Builder;
+    dateTime(): Builder;
+    date(): Builder;
+    time(): Builder;
+    email(): Builder;
+    idnEmail(): Builder;
+    hostname(): Builder;
+    idnHostname(): Builder;
+    ipv4(): Builder;
+    ipv6(): Builder;
+    uri(): Builder;
+    uriReference(): Builder;
+    iri(): Builder;
+    iriReference(): Builder;
+    uriTemplate(): Builder;
+    jsonPointer(): Builder;
+    relativeJsonPointer(): Builder;
+    regex(): Builder;
+    content(encoding: string, mediaType: string): Builder;
+
     array(items: Primitive | Schema | Primitive[] | Schema[]): Builder;
     items(value: Primitive | Schema | Primitive[] | Schema[]): Builder;
     maxItems(value: number): Builder;
