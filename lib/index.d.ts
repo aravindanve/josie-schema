@@ -1,20 +1,25 @@
-// reference: https://json-schema.org/latest/json-schema-validation.html
-// based on json-schema-draft-07
+/*
+ * Type Definitions for Josie Schema
+ * https://github.com/aravindanve
+ *
+ * based on json-schema/draft-07
+ * see SUPPORT.md for additional information
+ *
+ */
 
 type PickByType<Base, T> = Pick<Base, { [K in keyof Base]: Base[K] extends T ? K : never; }[keyof Base]>;
 
 declare namespace Josie {
-  export type Primitive = null | boolean | number | string;
-  export type SchemaType = 'null' | 'boolean' | 'number' | 'integer' | 'string' | 'array' | 'object';
-  export type SchemaFormat =
-    'date-time' | 'date' | 'time' | 'email' | 'idn-email' | 'hostname' | 'idn-hostname' |
-    'ipv4' | 'ipv6' | 'uri' | 'uri-reference' | 'iri' | 'iri-reference' | 'uri-template' |
-    'json-pointer' | 'relative-json-pointer' | 'regex';
+  export type Type = 'null' | 'boolean' | 'number' | 'integer' | 'string' | 'array' | 'object';
+  export type Format = 'date-time' | 'date' | 'time' | 'email' | 'hostname' | 'ipv4' | 'ipv6' |
+    'uri' | 'uri-reference' | 'uri-template' | 'regex';
 
-  export interface Schema {
-    type?: SchemaType | SchemaType[];
-    enum?: [Primitive];
-    const?: Primitive;
+  export type Schema = boolean | SchemaObject;
+
+  export interface SchemaObject {
+    type?: Type | Type[];
+    enum?: [any];
+    const?: any;
     default?: any;
 
     multipeOf?: number;
@@ -26,12 +31,10 @@ declare namespace Josie {
     maxLength?: number;
     minLength?: number;
     pattern?: string;
-    format?: SchemaFormat;
-    contentEncoding?: string;
-    contentMediaType?: string;
+    format?: Format;
 
     items?: Schema | Schema[];
-    additionalItems?: boolean;
+    additionalItems?: Schema;
     maxItems?: number;
     minItems?: number;
     uniqueItems?: boolean;
@@ -39,25 +42,20 @@ declare namespace Josie {
 
     maxProperties?: number;
     minProperties?: number;
+    required?: string[];
     properties?: { [name: string]: Schema; };
     patternProperties?: { [name: string]: Schema; };
-    additionalProperties?: boolean;
+    additionalProperties?: Schema;
     propertyNames?: Schema;
 
     if?: Schema;
     then?: Schema;
     else?: Schema;
 
-    allOf?: Schema[];
-    anyOf?: Schema[];
-    oneOf?: Schema[];
+    allOf?: [Schema];
+    anyOf?: [Schema];
+    oneOf?: [Schema];
     not?: Schema;
-  }
-
-  export type BuilderItems = Schema | Builder | (Schema | Builder)[];
-
-  export interface BuilderPropertyMap {
-    [property: string]: Schema | Builder;
   }
 
   export interface Types {
@@ -75,30 +73,28 @@ declare namespace Josie {
     DATE: 'date';
     TIME: 'time';
     EMAIL: 'email';
-    IDN_EMAIL: 'idn-email';
     HOSTNAME: 'hostname';
-    IDN_HOSTNAME: 'idn-hostname';
     IPV4: 'ipv4';
     IPV6: 'ipv6';
     URI: 'uri';
     URI_REFERENCE: 'uri-reference';
-    IRI: 'iri';
-    IRI_REFERENCE: 'iri-reference';
     URI_TEMPLATE: 'uri-template';
-    JSON_POINTER: 'json-pointer';
-    RELATIVE_JSON_POINTER: 'relative-json-pointer';
     REGEX: 'regex';
   }
 
-  export interface Builder {
-    type(value: SchemaType, ...rest: SchemaType[]): Builder;
-    hasType(...values: SchemaType[]): boolean;
+  export type BuilderOrSchema = Builder | Schema;
+  export type BuilderOrSchemaItems = BuilderOrSchema | BuilderOrSchema[];
+  export type BuilderProperties = { [name: string]: BuilderOrSchema };
 
-    enum(value: Primitive, ...rest: Primitive[]): Builder;
-    const(value: Primitive): Builder;
+  export interface Builder {
+    type(value: Type, ...more: Type[]): Builder;
+    hasType(...values: Type[]): boolean;
+
+    enum(value: any, ...more: any[]): Builder;
+    const(value: any): Builder;
     default(value: any): Builder;
 
-    literal(value: Primitive): Builder;
+    literal(value: any): Builder;
 
     null(): Builder;
 
@@ -117,85 +113,77 @@ declare namespace Josie {
     maxLength(value: number): Builder;
     minLength(value: number): Builder;
     pattern(value: string | RegExp): Builder;
-    format(value: SchemaFormat): Builder;
+    format(value: Format): Builder;
     dateTime(): Builder;
     date(): Builder;
     time(): Builder;
     email(): Builder;
-    idnEmail(): Builder;
     hostname(): Builder;
-    idnHostname(): Builder;
     ipv4(): Builder;
     ipv6(): Builder;
     uri(): Builder;
     uriReference(): Builder;
-    iri(): Builder;
-    iriReference(): Builder;
     uriTemplate(): Builder;
-    jsonPointer(): Builder;
-    relativeJsonPointer(): Builder;
     regex(): Builder;
-    content(encoding: string, mediaType?: string): Builder;
 
-    array(items?: BuilderItems): Builder;
-    items(value: BuilderItems): Builder;
-    additionalItems(value: boolean): Builder;
+    array(items?: BuilderOrSchemaItems): Builder;
+    items(value: BuilderOrSchemaItems): Builder;
+    additionalItems(value: BuilderOrSchema): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
     uniqueItems(value: boolean): Builder;
-    contains(value: Schema | Builder): Builder;
+    contains(value: BuilderOrSchema): Builder;
 
-    object(properties?: BuilderPropertyMap): Builder;
-    properties(value: BuilderPropertyMap): Builder;
+    object(properties?: BuilderProperties): Builder;
     maxProperties(value: number): Builder;
     minProperties(value: number): Builder;
-    patternProperties(value: BuilderPropertyMap): Builder;
-    additionalProperties(value: boolean): Builder;
-    propertyNames(value: Schema | Builder): Builder;
+    properties(value: BuilderProperties): Builder;
+    patternProperties(value: BuilderProperties): Builder;
+    additionalProperties(value: BuilderOrSchema): Builder;
+    propertyNames(value: BuilderOrSchema): Builder;
 
-    if(value: Schema | Builder): Builder;
-    then(value: Schema | Builder): Builder;
-    else(value: Schema | Builder): Builder;
+    if(value: BuilderOrSchema): Builder;
+    then(value: BuilderOrSchema): Builder;
+    else(value: BuilderOrSchema): Builder;
 
-    allOf(...values: (Schema | Builder)[]): Builder;
-    anyOf(...values: (Schema | Builder)[]): Builder;
-    oneOf(...values: (Schema | Builder)[]): Builder;
-    not(value: Schema | Builder): Builder;
+    allOf(...values: BuilderOrSchema[]): Builder;
+    anyOf(...values: BuilderOrSchema[]): Builder;
+    oneOf(...values: BuilderOrSchema[]): Builder;
+    not(value: BuilderOrSchema): Builder;
 
-    nullOrLiteral(value: Primitive): Builder;
-    booleanOrNull(): Builder;
-    numberOrNull(): Builder;
-    integerOrNull(): Builder;
-    stringOrNull(): Builder;
-    nullOrFormat(value: SchemaFormat): Builder;
+    nullOrLiteral(value: any): Builder;
+    nullOrBoolean(): Builder;
+    nullOrNumber(): Builder;
+    nullOrInteger(): Builder;
+    nullOrString(): Builder;
+    nullOrFormat(value: Format): Builder;
     nullOrPattern(value: string | RegExp): Builder;
-    nullOrContent(encoding: string, mediaType?: string): Builder;
-    dateTimeOrNull(): Builder;
-    dateOrNull(): Builder;
-    timeOrNull(): Builder;
-    emailOrNull(): Builder;
-    hostnameOrNull(): Builder;
-    ipv4OrNull(): Builder;
-    ipv6OrNull(): Builder;
-    uriOrNull(): Builder;
-    uriReferenceOrNull(): Builder;
-    uriTemplateOrNull(): Builder;
-    regexOrNull(): Builder;
-    nullOrArray(items?: BuilderItems): Builder;
-    nullOrObject(properties?: BuilderPropertyMap): Builder;
+    nullOrDateTime(): Builder;
+    nullOrDate(): Builder;
+    nullOrTime(): Builder;
+    nullOrEmail(): Builder;
+    nullOrHostname(): Builder;
+    nullOrIpv4(): Builder;
+    nullOrIpv6(): Builder;
+    nullOrUri(): Builder;
+    nullOrUriReference(): Builder;
+    nullOrUriTemplate(): Builder;
+    nullOrRegex(): Builder;
+    nullOrArray(items?: BuilderOrSchemaItems): Builder;
+    nullOrObject(properties?: BuilderProperties): Builder;
 
-    positiveNumber(): Builder;
-    negativeNumber(): Builder;
-    nonNegativeNumber(): Builder;
-    positiveInteger(): Builder;
-    negativeInteger(): Builder;
-    nonNegativeInteger(): Builder;
-    nonEmptyString(): Builder;
-    nonEmptyArray(): Builder;
-    nonEmptyObject(): Builder;
+    numberPositive(): Builder;
+    numberNegative(): Builder;
+    numberNonNegative(): Builder;
+    integerPositive(): Builder;
+    integerNegative(): Builder;
+    integerNonNegative(): Builder;
+    stringNonEmpty(): Builder;
+    arrayNonEmpty(): Builder;
+    objectNonEmpty(): Builder;
   }
 
-  export interface CheckUtil {
+  export interface Check {
     isUndefined(value: any): boolean;
     isNull(value: any): boolean;
     isBoolean(value: any): boolean;
@@ -218,11 +206,11 @@ declare namespace Josie {
   }
 
   export interface BuilderStatic extends PickByType<Builder, Function> {
-    (value?: Primitive | BuilderPropertyMap): Builder;
-    new (value?: Primitive | BuilderPropertyMap): Builder;
+    (properties?: BuilderProperties): Builder;
+    new (value?: BuilderProperties): Builder;
     types: Types;
     formats: Formats;
-    check: CheckUtil;
+    check: Check;
   }
 }
 

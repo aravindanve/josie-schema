@@ -1,80 +1,75 @@
 import * as josie from 'josie-schema';
 
 // types
-type BuilderStatic = josie.BuilderStatic; // typeof josie
-type Builder = josie.Builder;
-type BuilderItems = josie.BuilderItems;
-type BuilderPropertyMap = josie.BuilderPropertyMap;
+type Type = josie.Type;
+type Format = josie.Format;
 type Schema = josie.Schema;
-type SchemaType = josie.SchemaType;
-type SchemaFormat = josie.SchemaFormat;
-type Primitive = josie.Primitive;
-type Types = josie.Types;
-type Formats = josie.Formats;
-type CheckUtil = josie.CheckUtil;
+type SchemaObject = josie.SchemaObject;
+type BuilderOrSchema = josie.BuilderOrSchema;
+type BuilderOrSchemaItems = josie.BuilderOrSchemaItems;
+type BuilderProperties = josie.BuilderProperties;
+type Builder = josie.Builder;
+type Check = josie.Check;
+type BuilderStatic = josie.BuilderStatic; // typeof josie
 
 // static
-josie             // BuilderStatic
-josie.string();   // Builder
+josie // BuilderStatic
+josie.string(); // Builder
 josie.email();
 josie.type('string');
 josie.type('string').format('email');
 
 // as function
-josie();          // Builder
+josie(); // Builder
 josie().string();
 josie().email();
 josie().type('string');
 josie().type('string').format('email');
 
 // as class
-new josie();      // Builder
+(new josie()); // Builder
 (new josie()).string();
 (new josie()).email();
 (new josie()).type(josie.types.STRING);
 (new josie()).type(josie.types.STRING).format(josie.formats.EMAIL);
 
 // literals
-josie(null);
 josie.literal(null);
 josie().literal(null);
-new josie(null);
-josie(true);
 josie.literal(false);
 josie().literal(true);
-new josie(false);
-josie(42);
 josie.literal(42);
 josie().literal(42);
-new josie(42);
-josie('Hello World!');
 josie.literal('Hello World!');
 josie().literal('Hello World!');
-new josie('Hello World!');
+josie.literal([null, true, 50, 'hello', { name: 'Josie' }]);
+josie().literal([null, true, 50, 'hello', { name: 'Josie' }]);
+josie.literal({ name: 'Josie' });
+josie().literal({ name: 'Josie' });
 
 // undefined
-josie.check.isUndefined(0);
+josie.check.isUndefined(0); // false
 josie.check.isUndefined(undefined);
 
 // null
 josie.type(josie.types.NULL);
-josie().type(josie.types.NULL);
+josie().type('null');
 josie.null();
 josie().null();
-josie.check.isNull(0);
+josie.check.isNull(0); // false
 josie.check.isNull(null);
 
 // boolean
 josie.type(josie.types.BOOLEAN);
-josie().type(josie.types.BOOLEAN);
+josie().type('boolean');
 josie.boolean();
 josie().boolean();
-josie.check.isBoolean(0);
+josie.check.isBoolean(0); // false
 josie.check.isBoolean(false);
 
 // number
 josie.type(josie.types.NUMBER);
-josie().type(josie.types.NUMBER);
+josie().type('number');
 josie.number();
 josie().number();
 josie.number().multipleOf(10);
@@ -87,20 +82,20 @@ josie.number().minimum(10);
 josie().number().minimum(10);
 josie.number().exclusiveMinimum(10);
 josie().number().exclusiveMinimum(10);
-josie.check.isNumber(0);
 josie.check.isNumber('0'); // false
+josie.check.isNumber(0);
 
 // integer
 josie.type(josie.types.INTEGER);
-josie().type(josie.types.INTEGER);
+josie().type('integer');
 josie.integer();
 josie().integer();
+josie.check.isInteger(0.1); // false
 josie.check.isInteger(0);
-josie.check.isInteger(0.1);
 
 // string
 josie.type(josie.types.STRING);
-josie().type(josie.types.STRING);
+josie().type('string');
 josie.string();
 josie().string();
 josie.string().maxLength(255);
@@ -121,12 +116,8 @@ josie.string().time();
 josie().string().time();
 josie.string().email();
 josie().string().email();
-josie.string().idnEmail();
-josie().string().idnEmail();
 josie.string().hostname();
 josie().string().hostname();
-josie.string().idnHostname();
-josie().string().idnHostname();
 josie.string().ipv4();
 josie().string().ipv4();
 josie.string().ipv6();
@@ -135,26 +126,16 @@ josie.string().uri();
 josie().string().uri();
 josie.string().uriReference();
 josie().string().uriReference();
-josie.string().iri();
-josie().string().iri();
-josie.string().iriReference();
-josie().string().iriReference();
 josie.string().uriTemplate();
 josie().string().uriTemplate();
-josie.string().jsonPointer();
-josie().string().jsonPointer();
-josie.string().relativeJsonPointer();
-josie().string().relativeJsonPointer();
 josie.string().regex();
 josie().string().regex();
-josie.string().content('base64', 'image/png');
-josie().string().content('base64', 'image/png');
 josie.check.isString('');
 josie.check.isNonEmptyString('hello');
 
 // array
 josie.type(josie.types.ARRAY);
-josie().type(josie.types.ARRAY);
+josie().type('array');
 josie.array();
 josie().array();
 josie.array(josie.string());
@@ -162,7 +143,7 @@ josie().array(josie.string());
 josie.array().items(josie.number());
 josie().array().items(josie.number());
 josie.array().additionalItems(true);
-josie().array().additionalItems(true);
+josie().array().additionalItems(josie.number());
 josie.array().maxItems(10);
 josie().array().maxItems(10);
 josie.array().minItems(10);
@@ -175,8 +156,9 @@ josie.check.isArray([]);
 josie.check.isNonEmptyArray(['hello']);
 
 // object
+josie({});
 josie.type(josie.types.OBJECT);
-josie().type(josie.types.OBJECT);
+josie().type('object');
 josie.object();
 josie().object();
 josie({
@@ -211,7 +193,7 @@ josie().object().patternProperties({
   '^user_': josie.email()
 });
 josie.object().additionalProperties(true);
-josie().object().additionalProperties(true);
+josie().object().additionalProperties(josie.date());
 josie.object().propertyNames(josie.email());
 josie().object().propertyNames(josie.email());
 josie.check.isObject({});
