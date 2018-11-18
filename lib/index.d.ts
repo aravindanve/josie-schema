@@ -105,6 +105,26 @@ declare namespace josie {
     propertyNames(value: Schema | Builder): Builder;
   }
 
+  export interface checkUtils {
+    isUndefined(value: any): boolean;
+    isNull(value: any): boolean;
+    isBoolean(value: any): boolean;
+    isNumber(value: any): boolean;
+    isNonZeroNumber(value: any): boolean;
+    isPositiveNumber(value: any): boolean;
+    isNegativeNumber(value: any): boolean;
+    isInteger(value: any): boolean;
+    isNonZeroInteger(value: any): boolean;
+    isPositiveInteger(value: any): boolean;
+    isNegativeInteger(value: any): boolean;
+    isString(value: any): boolean;
+    isNonEmptyString(value: any): boolean;
+    isArray(value: any): boolean;
+    isNonEmptyArray(value: any): boolean;
+    isObject(value: any): boolean;
+    isNonEmptyObject(value: any): boolean;
+  }
+
   export class Builder {
     constructor(value?: Primitive | { [k: string]: Schema | Builder });
   }
@@ -113,6 +133,7 @@ declare namespace josie {
     (value?: Primitive | { [k: string]: Schema | Builder }): Builder;
     types: typeof TypeString;
     formats: typeof FormatString;
+    check: checkUtils;
   }
 }
 

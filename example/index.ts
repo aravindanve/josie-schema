@@ -13,15 +13,22 @@ schema('Hello World!');
 schema.literal('Hello World!');
 schema().literal('Hello World!');
 
+schema.check.isUndefined(0);
+schema.check.isUndefined(undefined);
+
 schema.type(schema.types.NULL);
 schema().type(schema.types.NULL);
 schema.null();
 schema().null();
+schema.check.isNull(0);
+schema.check.isNull(null);
 
 schema.type(schema.types.BOOLEAN);
 schema().type(schema.types.BOOLEAN);
 schema.boolean();
 schema().boolean();
+schema.check.isBoolean(0);
+schema.check.isBoolean(false);
 
 schema.type(schema.types.NUMBER);
 schema().type(schema.types.NUMBER);
@@ -37,11 +44,15 @@ schema.number().minimum(10);
 schema().number().minimum(10);
 schema.number().exclusiveMinimum(10);
 schema().number().exclusiveMinimum(10);
+schema.check.isNumber(0);
+schema.check.isNumber('0'); // false
 
 schema.type(schema.types.INTEGER);
 schema().type(schema.types.INTEGER);
 schema.integer();
 schema().integer();
+schema.check.isInteger(0);
+schema.check.isInteger(0.1);
 
 schema.type(schema.types.STRING);
 schema().type(schema.types.STRING);
@@ -89,6 +100,8 @@ schema.string().regex();
 schema().string().regex();
 schema.string().content('base64', 'image/png');
 schema().string().content('base64', 'image/png');
+schema.check.isString('');
+schema.check.isNonEmptyString('hello');
 
 schema.type(schema.types.ARRAY);
 schema().type(schema.types.ARRAY);
@@ -106,6 +119,8 @@ schema.array().uniqueItems(true);
 schema().array().uniqueItems(true);
 schema.array().contains(schema.literal(5));
 schema().array().contains(schema.literal(5));
+schema.check.isArray([]);
+schema.check.isNonEmptyArray(['hello']);
 
 schema.type(schema.types.OBJECT);
 schema().type(schema.types.OBJECT);
@@ -146,3 +161,5 @@ schema.object().additionalProperties(true);
 schema().object().additionalProperties(true);
 schema.object().propertyNames(schema.email());
 schema().object().propertyNames(schema.email());
+schema.check.isObject({});
+schema.check.isNonEmptyObject({ name: 'Josie' });
