@@ -98,8 +98,8 @@ declare namespace josie {
     regex(): Builder;
     content(encoding: string, mediaType: string): Builder;
 
-    array(items?: Schema | Builder | Schema[] | Builder[]): Builder;
-    items(value: Schema | Builder | Schema[] | Builder[]): Builder;
+    array(items?: Schema | Builder | (Schema | Builder)[]): Builder;
+    items(value: Schema | Builder | (Schema | Builder)[]): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
     uniqueItems(value: boolean): Builder;
@@ -112,6 +112,15 @@ declare namespace josie {
     patternProperties(value: { [k: string]: Schema | Builder }): Builder;
     additionalProperties(value: boolean): Builder;
     propertyNames(value: Schema | Builder): Builder;
+
+    if(value: Schema | Builder): Builder;
+    then(value: Schema | Builder): Builder;
+    else(value: Schema | Builder): Builder;
+
+    allOf(...values: (Schema | Builder)[]): Builder;
+    anyOf(...values: (Schema | Builder)[]): Builder;
+    oneOf(...values: (Schema | Builder)[]): Builder;
+    not(value: Schema | Builder): Builder;
 
     nullOrLiteral(value: Primitive): Builder;
     booleanOrNull(): Builder;
@@ -132,7 +141,7 @@ declare namespace josie {
     uriReferenceOrNull(): Builder;
     uriTemplateOrNull(): Builder;
     regexOrNull(): Builder;
-    nullOrArray(items?: Schema | Builder | Schema[] | Builder[]): Builder;
+    nullOrArray(items?: Schema | Builder | (Schema | Builder)[]): Builder;
     nullOrObject(properties?: { [k: string]: Schema | Builder }): Builder;
 
     positiveNumber(): Builder;
