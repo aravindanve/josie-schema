@@ -75,8 +75,10 @@ declare namespace josie {
     integer(): Builder;
 
     string(): Builder;
-    format(value: SchemaFormat): Builder;
+    maxLength(value: number): Builder;
+    minLength(value: number): Builder;
     pattern(value: string | RegExp): Builder;
+    format(value: SchemaFormat): Builder;
     dateTime(): Builder;
     date(): Builder;
     time(): Builder;
@@ -132,6 +134,16 @@ declare namespace josie {
     regexOrNull(): Builder;
     nullOrArray(items?: Schema | Builder | Schema[] | Builder[]): Builder;
     nullOrObject(properties?: { [k: string]: Schema | Builder }): Builder;
+
+    positiveNumber(): Builder;
+    negativeNumber(): Builder;
+    nonNegativeNumber(): Builder;
+    positiveInteger(): Builder;
+    negativeInteger(): Builder;
+    nonNegativeInteger(): Builder;
+    nonEmptyString(): Builder;
+    nonEmptyArray(): Builder;
+    nonEmptyObject(): Builder;
   }
 
   export interface checkUtils {
