@@ -51,6 +51,12 @@ declare namespace josie {
     contains: Schema;
   }
 
+  export type Items = Schema | Builder | (Schema | Builder)[];
+
+  export interface PropertyMap {
+    [property: string]: Schema | Builder;
+  }
+
   export interface Builder {
     type(value: SchemaType, ...rest: SchemaType[]): Builder;
     hasType(...values: SchemaType[]): boolean;
@@ -98,18 +104,18 @@ declare namespace josie {
     regex(): Builder;
     content(encoding: string, mediaType: string): Builder;
 
-    array(items?: Schema | Builder | (Schema | Builder)[]): Builder;
-    items(value: Schema | Builder | (Schema | Builder)[]): Builder;
+    array(items?: Items): Builder;
+    items(value: Items): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
     uniqueItems(value: boolean): Builder;
     contains(value: Schema | Builder): Builder;
 
-    object(properties?: { [k: string]: Schema | Builder }): Builder;
-    properties(value: { [k: string]: Schema | Builder }): Builder;
+    object(properties?: PropertyMap): Builder;
+    properties(value: PropertyMap): Builder;
     maxProperties(value: number): Builder;
     minProperties(value: number): Builder;
-    patternProperties(value: { [k: string]: Schema | Builder }): Builder;
+    patternProperties(value: PropertyMap): Builder;
     additionalProperties(value: boolean): Builder;
     propertyNames(value: Schema | Builder): Builder;
 
@@ -141,8 +147,8 @@ declare namespace josie {
     uriReferenceOrNull(): Builder;
     uriTemplateOrNull(): Builder;
     regexOrNull(): Builder;
-    nullOrArray(items?: Schema | Builder | (Schema | Builder)[]): Builder;
-    nullOrObject(properties?: { [k: string]: Schema | Builder }): Builder;
+    nullOrArray(items?: Items): Builder;
+    nullOrObject(properties?: PropertyMap): Builder;
 
     positiveNumber(): Builder;
     negativeNumber(): Builder;
@@ -155,7 +161,7 @@ declare namespace josie {
     nonEmptyObject(): Builder;
   }
 
-  export interface checkUtils {
+  export interface CheckUtils {
     isUndefined(value: any): boolean;
     isNull(value: any): boolean;
     isBoolean(value: any): boolean;
@@ -178,14 +184,14 @@ declare namespace josie {
   }
 
   export class Builder {
-    constructor(value?: Primitive | { [k: string]: Schema | Builder });
+    constructor(value?: Primitive | PropertyMap);
   }
 
   export interface BuilderStatic extends PickTypes<Builder, Function> {
-    (value?: Primitive | { [k: string]: Schema | Builder }): Builder;
+    (value?: Primitive | PropertyMap): Builder;
     types: typeof Types;
     formats: typeof Formats;
-    check: checkUtils;
+    check: CheckUtils;
   }
 }
 
