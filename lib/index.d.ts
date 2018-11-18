@@ -1,7 +1,7 @@
 declare namespace josie {
   type PickTypes<Base, T> = Pick<Base, { [K in keyof Base]: Base[K] extends T ? K : never; }[keyof Base]>;
 
-  export type Primitive = boolean | null | number | string;
+  export type Primitive = null | boolean | number | string;
 
   export enum TypeString {
     BOOLEAN = 'boolean',
@@ -105,8 +105,12 @@ declare namespace josie {
     propertyNames(value: Schema | Builder): Builder;
   }
 
+  export class Builder {
+    constructor(value?: Primitive | { [k: string]: Schema | Builder });
+  }
+
   export interface BuilderStatic extends PickTypes<Builder, Function> {
-    (): Builder;
+    (value?: Primitive | { [k: string]: Schema | Builder }): Builder;
     types: typeof TypeString;
     formats: typeof FormatString;
   }

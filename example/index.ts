@@ -1,11 +1,15 @@
 import * as schema from 'josie-schema';
 
+schema(null);
 schema.literal(null);
 schema().literal(null);
+schema(false);
 schema.literal(true);
 schema().literal(false);
+schema(42);
 schema.literal(1);
 schema().literal(1);
+schema('Hello World!');
 schema.literal('Hello World!');
 schema().literal('Hello World!');
 
@@ -107,6 +111,10 @@ schema.type(schema.types.OBJECT);
 schema().type(schema.types.OBJECT);
 schema.object();
 schema().object();
+schema({
+  name: schema.string(),
+  age: schema.number()
+});
 schema.object({
   name: schema.string(),
   age: schema.number()
