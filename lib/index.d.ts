@@ -173,6 +173,8 @@ declare namespace josie {
     isNonEmptyArray(value: any): boolean;
     isObject(value: any): boolean;
     isNonEmptyObject(value: any): boolean;
+    isTypeString(value: any): boolean;
+    isFormatString(value: any): boolean;
   }
 
   export class Builder {
