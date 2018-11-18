@@ -1,6 +1,9 @@
-declare namespace josie {
-  type PickTypes<Base, T> = Pick<Base, { [K in keyof Base]: Base[K] extends T ? K : never; }[keyof Base]>;
+// reference: https://json-schema.org/latest/json-schema-validation.html
+// based on json-schema-draft-07
 
+type PickByType<Base, T> = Pick<Base, { [K in keyof Base]: Base[K] extends T ? K : never; }[keyof Base]>;
+
+declare namespace Josie {
   export type Primitive = null | boolean | number | string;
   export type SchemaType = 'null' | 'boolean' | 'number' | 'integer' | 'string' | 'array' | 'object';
   export type SchemaFormat =
@@ -8,53 +11,83 @@ declare namespace josie {
     'ipv4' | 'ipv6' | 'uri' | 'uri-reference' | 'iri' | 'iri-reference' | 'uri-template' |
     'json-pointer' | 'relative-json-pointer' | 'regex';
 
-  export enum Types {
-    BOOLEAN = 'boolean',
-    NULL = 'null',
-    NUMBER = 'number',
-    INTEGER = 'integer',
-    STRING = 'string',
-    ARRAY = 'array',
-    OBJECT = 'object'
-  }
-
-  export enum Formats {
-    DATE_TIME = 'date-time',
-    DATE = 'date',
-    TIME = 'time',
-    EMAIL = 'email',
-    IDN_EMAIL = 'idn-email',
-    HOSTNAME = 'hostname',
-    IDN_HOSTNAME = 'idn-hostname',
-    IPV4 = 'ipv4',
-    IPV6 = 'ipv6',
-    URI = 'uri',
-    URI_REFERENCE = 'uri-reference',
-    IRI = 'iri',
-    IRI_REFERENCE = 'iri-reference',
-    URI_TEMPLATE = 'uri-template',
-    JSON_POINTER = 'json-pointer',
-    RELATIVE_JSON_POINTER = 'relative-json-pointer',
-    REGEX = 'regex'
-  }
-
   export interface Schema {
     type?: SchemaType | SchemaType[];
     enum?: [Primitive];
     const?: Primitive;
     default?: any;
 
-    items: Primitive | Schema | Primitive[] | Schema[];
-    maxItems: number;
-    minItems: number;
-    uniqueItems: boolean;
-    contains: Schema;
+    multipeOf?: number;
+    maximum?: number;
+    exclusiveMaximum?: number;
+    minimum?: number;
+    exclusiveMinimum?: number;
+
+    maxLength?: number;
+    minLength?: number;
+    pattern?: string;
+    format?: SchemaFormat;
+    contentEncoding?: string;
+    contentMediaType?: string;
+
+    items?: Schema | Schema[];
+    additionalItems?: boolean;
+    maxItems?: number;
+    minItems?: number;
+    uniqueItems?: boolean;
+    contains?: Schema;
+
+    maxProperties?: number;
+    minProperties?: number;
+    properties?: { [name: string]: Schema; };
+    patternProperties?: { [name: string]: Schema; };
+    additionalProperties?: boolean;
+    propertyNames?: Schema;
+
+    if?: Schema;
+    then?: Schema;
+    else?: Schema;
+
+    allOf?: Schema[];
+    anyOf?: Schema[];
+    oneOf?: Schema[];
+    not?: Schema;
   }
 
-  export type Items = Schema | Builder | (Schema | Builder)[];
+  export type BuilderItems = Schema | Builder | (Schema | Builder)[];
 
-  export interface PropertyMap {
+  export interface BuilderPropertyMap {
     [property: string]: Schema | Builder;
+  }
+
+  export interface Types {
+    BOOLEAN: 'boolean';
+    NULL: 'null';
+    NUMBER: 'number';
+    INTEGER: 'integer';
+    STRING: 'string';
+    ARRAY: 'array';
+    OBJECT: 'object';
+  }
+
+  export interface Formats {
+    DATE_TIME: 'date-time';
+    DATE: 'date';
+    TIME: 'time';
+    EMAIL: 'email';
+    IDN_EMAIL: 'idn-email';
+    HOSTNAME: 'hostname';
+    IDN_HOSTNAME: 'idn-hostname';
+    IPV4: 'ipv4';
+    IPV6: 'ipv6';
+    URI: 'uri';
+    URI_REFERENCE: 'uri-reference';
+    IRI: 'iri';
+    IRI_REFERENCE: 'iri-reference';
+    URI_TEMPLATE: 'uri-template';
+    JSON_POINTER: 'json-pointer';
+    RELATIVE_JSON_POINTER: 'relative-json-pointer';
+    REGEX: 'regex';
   }
 
   export interface Builder {
@@ -102,20 +135,21 @@ declare namespace josie {
     jsonPointer(): Builder;
     relativeJsonPointer(): Builder;
     regex(): Builder;
-    content(encoding: string, mediaType: string): Builder;
+    content(encoding: string, mediaType?: string): Builder;
 
-    array(items?: Items): Builder;
-    items(value: Items): Builder;
+    array(items?: BuilderItems): Builder;
+    items(value: BuilderItems): Builder;
+    additionalItems(value: boolean): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
     uniqueItems(value: boolean): Builder;
     contains(value: Schema | Builder): Builder;
 
-    object(properties?: PropertyMap): Builder;
-    properties(value: PropertyMap): Builder;
+    object(properties?: BuilderPropertyMap): Builder;
+    properties(value: BuilderPropertyMap): Builder;
     maxProperties(value: number): Builder;
     minProperties(value: number): Builder;
-    patternProperties(value: PropertyMap): Builder;
+    patternProperties(value: BuilderPropertyMap): Builder;
     additionalProperties(value: boolean): Builder;
     propertyNames(value: Schema | Builder): Builder;
 
@@ -135,7 +169,7 @@ declare namespace josie {
     stringOrNull(): Builder;
     nullOrFormat(value: SchemaFormat): Builder;
     nullOrPattern(value: string | RegExp): Builder;
-    nullOrContent(encoding: string, mediaType: string): Builder;
+    nullOrContent(encoding: string, mediaType?: string): Builder;
     dateTimeOrNull(): Builder;
     dateOrNull(): Builder;
     timeOrNull(): Builder;
@@ -147,8 +181,8 @@ declare namespace josie {
     uriReferenceOrNull(): Builder;
     uriTemplateOrNull(): Builder;
     regexOrNull(): Builder;
-    nullOrArray(items?: Items): Builder;
-    nullOrObject(properties?: PropertyMap): Builder;
+    nullOrArray(items?: BuilderItems): Builder;
+    nullOrObject(properties?: BuilderPropertyMap): Builder;
 
     positiveNumber(): Builder;
     negativeNumber(): Builder;
@@ -161,7 +195,7 @@ declare namespace josie {
     nonEmptyObject(): Builder;
   }
 
-  export interface CheckUtils {
+  export interface CheckUtil {
     isUndefined(value: any): boolean;
     isNull(value: any): boolean;
     isBoolean(value: any): boolean;
@@ -183,17 +217,14 @@ declare namespace josie {
     isFormatString(value: any): boolean;
   }
 
-  export class Builder {
-    constructor(value?: Primitive | PropertyMap);
-  }
-
-  export interface BuilderStatic extends PickTypes<Builder, Function> {
-    (value?: Primitive | PropertyMap): Builder;
-    types: typeof Types;
-    formats: typeof Formats;
-    check: CheckUtils;
+  export interface BuilderStatic extends PickByType<Builder, Function> {
+    (value?: Primitive | BuilderPropertyMap): Builder;
+    new (value?: Primitive | BuilderPropertyMap): Builder;
+    types: Types;
+    formats: Formats;
+    check: CheckUtil;
   }
 }
 
-declare const schema: josie.BuilderStatic;
-export = schema;
+declare const Josie: Josie.BuilderStatic;
+export = Josie;

@@ -1,173 +1,223 @@
-import * as schema from 'josie-schema';
+import * as josie from 'josie-schema';
 
-schema(null);
-schema.literal(null);
-schema().literal(null);
-schema(false);
-schema.literal(true);
-schema().literal(false);
-schema(42);
-schema.literal(1);
-schema().literal(1);
-schema('Hello World!');
-schema.literal('Hello World!');
-schema().literal('Hello World!');
+// types
+type BuilderStatic = josie.BuilderStatic; // typeof josie
+type Builder = josie.Builder;
+type BuilderItems = josie.BuilderItems;
+type BuilderPropertyMap = josie.BuilderPropertyMap;
+type Schema = josie.Schema;
+type SchemaType = josie.SchemaType;
+type SchemaFormat = josie.SchemaFormat;
+type Primitive = josie.Primitive;
+type Types = josie.Types;
+type Formats = josie.Formats;
+type CheckUtil = josie.CheckUtil;
 
-schema.check.isUndefined(0);
-schema.check.isUndefined(undefined);
+// static
+josie             // BuilderStatic
+josie.string();   // Builder
+josie.email();
+josie.type('string');
+josie.type('string').format('email');
 
-schema.type(schema.types.NULL);
-schema().type(schema.types.NULL);
-schema.null();
-schema().null();
-schema.check.isNull(0);
-schema.check.isNull(null);
+// as function
+josie();          // Builder
+josie().string();
+josie().email();
+josie().type('string');
+josie().type('string').format('email');
 
-schema.type(schema.types.BOOLEAN);
-schema().type(schema.types.BOOLEAN);
-schema.boolean();
-schema().boolean();
-schema.check.isBoolean(0);
-schema.check.isBoolean(false);
+// as class
+new josie();      // Builder
+(new josie()).string();
+(new josie()).email();
+(new josie()).type(josie.types.STRING);
+(new josie()).type(josie.types.STRING).format(josie.formats.EMAIL);
 
-schema.type(schema.types.NUMBER);
-schema().type(schema.types.NUMBER);
-schema.number();
-schema().number();
-schema.number().multipleOf(10);
-schema().number().multipleOf(10);
-schema.number().maximum(10);
-schema().number().maximum(10);
-schema.number().exclusiveMaximum(10);
-schema().number().exclusiveMaximum(10);
-schema.number().minimum(10);
-schema().number().minimum(10);
-schema.number().exclusiveMinimum(10);
-schema().number().exclusiveMinimum(10);
-schema.check.isNumber(0);
-schema.check.isNumber('0'); // false
+// literals
+josie(null);
+josie.literal(null);
+josie().literal(null);
+new josie(null);
+josie(true);
+josie.literal(false);
+josie().literal(true);
+new josie(false);
+josie(42);
+josie.literal(42);
+josie().literal(42);
+new josie(42);
+josie('Hello World!');
+josie.literal('Hello World!');
+josie().literal('Hello World!');
+new josie('Hello World!');
 
-schema.type(schema.types.INTEGER);
-schema().type(schema.types.INTEGER);
-schema.integer();
-schema().integer();
-schema.check.isInteger(0);
-schema.check.isInteger(0.1);
+// undefined
+josie.check.isUndefined(0);
+josie.check.isUndefined(undefined);
 
-schema.type(schema.types.STRING);
-schema().type(schema.types.STRING);
-schema.string();
-schema().string();
-schema.string().maxLength(255);
-schema().string().maxLength(255);
-schema.string().minLength(1);
-schema().string().minLength(1);
-schema.string().pattern('[a-z]+');
-schema().string().pattern('[a-z]+');
-schema.string().pattern(/[a-z]+/);
-schema().string().pattern(/[a-z]+/);
-schema.string().format(schema.formats.EMAIL);
-schema().string().format(schema.formats.EMAIL);
-schema.string().dateTime();
-schema().string().dateTime();
-schema.string().date();
-schema().string().date();
-schema.string().time();
-schema().string().time();
-schema.string().email();
-schema().string().email();
-schema.string().idnEmail();
-schema().string().idnEmail();
-schema.string().hostname();
-schema().string().hostname();
-schema.string().idnHostname();
-schema().string().idnHostname();
-schema.string().ipv4();
-schema().string().ipv4();
-schema.string().ipv6();
-schema().string().ipv6();
-schema.string().uri();
-schema().string().uri();
-schema.string().uriReference();
-schema().string().uriReference();
-schema.string().iri();
-schema().string().iri();
-schema.string().iriReference();
-schema().string().iriReference();
-schema.string().uriTemplate();
-schema().string().uriTemplate();
-schema.string().jsonPointer();
-schema().string().jsonPointer();
-schema.string().relativeJsonPointer();
-schema().string().relativeJsonPointer();
-schema.string().regex();
-schema().string().regex();
-schema.string().content('base64', 'image/png');
-schema().string().content('base64', 'image/png');
-schema.check.isString('');
-schema.check.isNonEmptyString('hello');
+// null
+josie.type(josie.types.NULL);
+josie().type(josie.types.NULL);
+josie.null();
+josie().null();
+josie.check.isNull(0);
+josie.check.isNull(null);
 
-schema.type(schema.types.ARRAY);
-schema().type(schema.types.ARRAY);
-schema.array();
-schema().array();
-schema.array(schema.string());
-schema().array(schema.string());
-schema.array().items(schema.number());
-schema().array().items(schema.number());
-schema.array().maxItems(10);
-schema().array().maxItems(10);
-schema.array().minItems(10);
-schema().array().minItems(10);
-schema.array().uniqueItems(true);
-schema().array().uniqueItems(true);
-schema.array().contains(schema.literal(5));
-schema().array().contains(schema.literal(5));
-schema.check.isArray([]);
-schema.check.isNonEmptyArray(['hello']);
+// boolean
+josie.type(josie.types.BOOLEAN);
+josie().type(josie.types.BOOLEAN);
+josie.boolean();
+josie().boolean();
+josie.check.isBoolean(0);
+josie.check.isBoolean(false);
 
-schema.type(schema.types.OBJECT);
-schema().type(schema.types.OBJECT);
-schema.object();
-schema().object();
-schema({
-  name: schema.string(),
-  age: schema.number()
+// number
+josie.type(josie.types.NUMBER);
+josie().type(josie.types.NUMBER);
+josie.number();
+josie().number();
+josie.number().multipleOf(10);
+josie().number().multipleOf(10);
+josie.number().maximum(10);
+josie().number().maximum(10);
+josie.number().exclusiveMaximum(10);
+josie().number().exclusiveMaximum(10);
+josie.number().minimum(10);
+josie().number().minimum(10);
+josie.number().exclusiveMinimum(10);
+josie().number().exclusiveMinimum(10);
+josie.check.isNumber(0);
+josie.check.isNumber('0'); // false
+
+// integer
+josie.type(josie.types.INTEGER);
+josie().type(josie.types.INTEGER);
+josie.integer();
+josie().integer();
+josie.check.isInteger(0);
+josie.check.isInteger(0.1);
+
+// string
+josie.type(josie.types.STRING);
+josie().type(josie.types.STRING);
+josie.string();
+josie().string();
+josie.string().maxLength(255);
+josie().string().maxLength(255);
+josie.string().minLength(1);
+josie().string().minLength(1);
+josie.string().pattern('[a-z]+');
+josie().string().pattern('[a-z]+');
+josie.string().pattern(/[a-z]+/);
+josie().string().pattern(/[a-z]+/);
+josie.string().format(josie.formats.EMAIL);
+josie().string().format(josie.formats.EMAIL);
+josie.string().dateTime();
+josie().string().dateTime();
+josie.string().date();
+josie().string().date();
+josie.string().time();
+josie().string().time();
+josie.string().email();
+josie().string().email();
+josie.string().idnEmail();
+josie().string().idnEmail();
+josie.string().hostname();
+josie().string().hostname();
+josie.string().idnHostname();
+josie().string().idnHostname();
+josie.string().ipv4();
+josie().string().ipv4();
+josie.string().ipv6();
+josie().string().ipv6();
+josie.string().uri();
+josie().string().uri();
+josie.string().uriReference();
+josie().string().uriReference();
+josie.string().iri();
+josie().string().iri();
+josie.string().iriReference();
+josie().string().iriReference();
+josie.string().uriTemplate();
+josie().string().uriTemplate();
+josie.string().jsonPointer();
+josie().string().jsonPointer();
+josie.string().relativeJsonPointer();
+josie().string().relativeJsonPointer();
+josie.string().regex();
+josie().string().regex();
+josie.string().content('base64', 'image/png');
+josie().string().content('base64', 'image/png');
+josie.check.isString('');
+josie.check.isNonEmptyString('hello');
+
+// array
+josie.type(josie.types.ARRAY);
+josie().type(josie.types.ARRAY);
+josie.array();
+josie().array();
+josie.array(josie.string());
+josie().array(josie.string());
+josie.array().items(josie.number());
+josie().array().items(josie.number());
+josie.array().additionalItems(true);
+josie().array().additionalItems(true);
+josie.array().maxItems(10);
+josie().array().maxItems(10);
+josie.array().minItems(10);
+josie().array().minItems(10);
+josie.array().uniqueItems(true);
+josie().array().uniqueItems(true);
+josie.array().contains(josie.literal(5));
+josie().array().contains(josie.literal(5));
+josie.check.isArray([]);
+josie.check.isNonEmptyArray(['hello']);
+
+// object
+josie.type(josie.types.OBJECT);
+josie().type(josie.types.OBJECT);
+josie.object();
+josie().object();
+josie({
+  name: josie.string(),
+  age: josie.number()
 });
-schema.object({
-  name: schema.string(),
-  age: schema.number()
+josie.object({
+  name: josie.string(),
+  age: josie.number()
 });
-schema().object({
-  name: schema.string(),
-  age: schema.number()
+josie().object({
+  name: josie.string(),
+  age: josie.number()
 });
-schema.object().properties({
-  name: schema.string(),
-  age: schema.number()
+josie.object().properties({
+  name: josie.string(),
+  age: josie.number()
 });
-schema().object().properties({
-  name: schema.string(),
-  age: schema.number()
+josie().object().properties({
+  name: josie.string(),
+  age: josie.number()
 });
-schema.object().maxProperties(10);
-schema().object().maxProperties(10);
-schema.object().minProperties(1);
-schema().object().minProperties(1);
-schema.object().patternProperties({
-  name: schema.string(),
-  age: schema.number()
+josie.object().maxProperties(10);
+josie().object().maxProperties(10);
+josie.object().minProperties(1);
+josie().object().minProperties(1);
+josie.object().patternProperties({
+  name: josie.string(),
+  age: josie.number()
 });
-schema().object().patternProperties({
-  '^user_': schema.email()
+josie().object().patternProperties({
+  '^user_': josie.email()
 });
-schema.object().additionalProperties(true);
-schema().object().additionalProperties(true);
-schema.object().propertyNames(schema.email());
-schema().object().propertyNames(schema.email());
-schema.check.isObject({});
-schema.check.isNonEmptyObject({ name: 'Josie' });
+josie.object().additionalProperties(true);
+josie().object().additionalProperties(true);
+josie.object().propertyNames(josie.email());
+josie().object().propertyNames(josie.email());
+josie.check.isObject({});
+josie.check.isNonEmptyObject({ name: 'Josie' });
 
-schema.type('string', 'number');
-schema.type('string').type('number').type('null');
-schema.string().number().null();
+// multiple types
+josie.type('string', 'number');
+josie.type('string').type('number').type('null');
+josie.string().number().null();

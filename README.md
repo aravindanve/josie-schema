@@ -1,4 +1,6 @@
-# JSON Schema Builder
+# Josie Schema
+
+JSON Schema Tools
 
 ## Test
 
