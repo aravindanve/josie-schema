@@ -2,8 +2,13 @@ declare namespace josie {
   type PickTypes<Base, T> = Pick<Base, { [K in keyof Base]: Base[K] extends T ? K : never; }[keyof Base]>;
 
   export type Primitive = null | boolean | number | string;
+  export type SchemaType = 'null' | 'boolean' | 'number' | 'integer' | 'string' | 'array' | 'object';
+  export type SchemaFormat =
+    'date-time' | 'date' | 'time' | 'email' | 'idn-email' | 'hostname' | 'idn-hostname' |
+    'ipv4' | 'ipv6' | 'uri' | 'uri-reference' | 'iri' | 'iri-reference' | 'uri-template' |
+    'json-pointer' | 'relative-json-pointer' | 'regex';
 
-  export enum TypeString {
+  export enum Types {
     BOOLEAN = 'boolean',
     NULL = 'null',
     NUMBER = 'number',
@@ -13,7 +18,7 @@ declare namespace josie {
     OBJECT = 'object'
   }
 
-  export enum FormatString {
+  export enum Formats {
     DATE_TIME = 'date-time',
     DATE = 'date',
     TIME = 'time',
@@ -34,7 +39,7 @@ declare namespace josie {
   }
 
   export interface Schema {
-    type?: TypeString | TypeString[];
+    type?: SchemaType | SchemaType[];
     enum?: [Primitive];
     const?: Primitive;
     default?: any;
@@ -47,7 +52,9 @@ declare namespace josie {
   }
 
   export interface Builder {
-    type(value: TypeString, ...rest: TypeString[]): Builder;
+    type(value: SchemaType, ...rest: SchemaType[]): Builder;
+    hasType(...values: SchemaType[]): boolean;
+
     enum(value: Primitive, ...rest: Primitive[]): Builder;
     const(value: Primitive): Builder;
     default(value: any): Builder;
@@ -68,7 +75,7 @@ declare namespace josie {
     integer(): Builder;
 
     string(): Builder;
-    format(value: FormatString): Builder;
+    format(value: SchemaFormat): Builder;
     pattern(value: string | RegExp): Builder;
     dateTime(): Builder;
     date(): Builder;
@@ -131,8 +138,8 @@ declare namespace josie {
 
   export interface BuilderStatic extends PickTypes<Builder, Function> {
     (value?: Primitive | { [k: string]: Schema | Builder }): Builder;
-    types: typeof TypeString;
-    formats: typeof FormatString;
+    types: typeof Types;
+    formats: typeof Formats;
     check: checkUtils;
   }
 }
