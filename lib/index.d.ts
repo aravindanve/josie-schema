@@ -110,6 +110,28 @@ declare namespace josie {
     patternProperties(value: { [k: string]: Schema | Builder }): Builder;
     additionalProperties(value: boolean): Builder;
     propertyNames(value: Schema | Builder): Builder;
+
+    nullOrLiteral(value: Primitive): Builder;
+    booleanOrNull(): Builder;
+    numberOrNull(): Builder;
+    integerOrNull(): Builder;
+    stringOrNull(): Builder;
+    nullOrFormat(value: SchemaFormat): Builder;
+    nullOrPattern(value: string | RegExp): Builder;
+    nullOrContent(encoding: string, mediaType: string): Builder;
+    dateTimeOrNull(): Builder;
+    dateOrNull(): Builder;
+    timeOrNull(): Builder;
+    emailOrNull(): Builder;
+    hostnameOrNull(): Builder;
+    ipv4OrNull(): Builder;
+    ipv6OrNull(): Builder;
+    uriOrNull(): Builder;
+    uriReferenceOrNull(): Builder;
+    uriTemplateOrNull(): Builder;
+    regexOrNull(): Builder;
+    nullOrArray(items?: Schema | Builder | Schema[] | Builder[]): Builder;
+    nullOrObject(properties?: { [k: string]: Schema | Builder }): Builder;
   }
 
   export interface checkUtils {
