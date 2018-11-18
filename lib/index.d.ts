@@ -47,7 +47,7 @@ declare namespace josie {
   }
 
   export interface Builder {
-    type(value: TypeString): Builder;
+    type(value: TypeString, ...rest: TypeString[]): Builder;
     enum(value: Primitive, ...rest: Primitive[]): Builder;
     const(value: Primitive): Builder;
     default(value: any): Builder;

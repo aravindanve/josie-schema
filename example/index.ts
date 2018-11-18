@@ -163,3 +163,7 @@ schema.object().propertyNames(schema.email());
 schema().object().propertyNames(schema.email());
 schema.check.isObject({});
 schema.check.isNonEmptyObject({ name: 'Josie' });
+
+schema.type(schema.types.STRING, schema.types.NUMBER);
+schema.type(schema.types.STRING).type(schema.types.NUMBER).type(schema.types.NULL);
+schema.string().number().null();
