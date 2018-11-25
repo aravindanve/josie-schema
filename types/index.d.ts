@@ -21,8 +21,8 @@ declare namespace Josie {
     examples?: any[];
     dependencies?: { [name: string]: Schema | string[] }
 
-    type?: Type | Type[];
-    enum?: [any];
+    type?: Type | [Type, ...Type[]];
+    enum?: [any, ...any[]];
     const?: any;
 
     multipeOf?: number;
@@ -36,7 +36,7 @@ declare namespace Josie {
     pattern?: string;
     format?: string;
 
-    items?: Schema | Schema[];
+    items?: Schema | [Schema, ...Schema[]];
     additionalItems?: Schema;
     maxItems?: number;
     minItems?: number;
@@ -58,9 +58,9 @@ declare namespace Josie {
     then?: Schema;
     else?: Schema;
 
-    allOf?: [Schema];
-    anyOf?: [Schema];
-    oneOf?: [Schema];
+    allOf?: [Schema, ...Schema[]];
+    anyOf?: [Schema, ...Schema[]];
+    oneOf?: [Schema, ...Schema[]];
     not?: Schema;
   }
 
@@ -77,8 +77,8 @@ declare namespace Josie {
     examples(value: any[]): Builder;
     dependencies(value: { [name: string]: Builder | Schema | string[] }): Builder;
 
-    type(value: Type | Type[]): Builder;
-    enum(value: [any]): Builder;
+    type(value: Type | [Type, ...Type[]]): Builder;
+    enum(value: [any, ...any[]]): Builder;
     const(value: any): Builder;
 
     multipeOf(value: number): Builder;
@@ -92,7 +92,7 @@ declare namespace Josie {
     pattern(value: string): Builder;
     format(value: string): Builder;
 
-    items(value: Builder | Schema | [Builder | Schema]): Builder;
+    items(value: Builder | Schema | [Builder | Schema, ...(Builder | Schema)[]]): Builder;
     additionalItems(value: Builder | Schema): Builder;
     maxItems(value: number): Builder;
     minItems(value: number): Builder;
@@ -114,9 +114,9 @@ declare namespace Josie {
     then(value: Builder | Schema): Builder;
     else(value: Builder | Schema): Builder;
 
-    allOf(value: [Builder | Schema]): Builder;
-    anyOf(value: [Builder | Schema]): Builder;
-    oneOf(value: [Builder | Schema]): Builder;
+    allOf(value: [Builder | Schema, ...(Builder | Schema)[]]): Builder;
+    anyOf(value: [Builder | Schema, ...(Builder | Schema)[]]): Builder;
+    oneOf(value: [Builder | Schema, ...(Builder | Schema)[]]): Builder;
     not(value: Builder | Schema): Builder;
   }
 
@@ -134,7 +134,7 @@ declare namespace Josie {
   export interface BuilderStatic extends KeywordChain {
     (schema?: Schema): Builder;
     new (schema?: Schema): Builder;
-    compile(): CompiledSchema;
+    compile(schema: Builder | Schema): CompiledSchema;
   }
 }
 
