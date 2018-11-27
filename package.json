@@ -17,11 +17,11 @@
   },
   "keywords": [
     "json-schema",
-    "json-schema-tools",
-    "schema",
-    "json",
+    "validator",
     "builder",
-    "factory"
+    "factory",
+    "json",
+    "schema"
   ],
   "author": "Aravindanve <aravindan.ve@outlook.com>",
   "license": "MIT",
