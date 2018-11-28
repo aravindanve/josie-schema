@@ -52,6 +52,14 @@ jst({
     'JSON-Schema-Test-Suite/draft-07': './JSON-Schema-Test-Suite/tests/draft7/{**/,}*.json',
     // 'Advanced Tests': './tests/{**/,}*.json'
   },
+  skip: [
+    'optional/content',
+    'draft7/definitions',
+    'format/idn-email',
+    'format/idn-hostname',
+    'format/iri',
+    'format/iri-reference',
+  ],
   async: false,
   afterEach,
   afterError,
