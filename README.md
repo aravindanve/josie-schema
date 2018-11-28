@@ -12,7 +12,7 @@ const schema = josie.compile({
     required: ['name', 'email'],
     properties: {
         name: {
-            type: string,
+            type: 'string',
             minLength: 2,
             maxLength: 200
         },
@@ -21,7 +21,7 @@ const schema = josie.compile({
             format: 'email'
         },
         age: {
-            type: number,
+            type: 'number',
             minimum: 18,
             exclusiveMaximum: 120
         }
@@ -36,7 +36,13 @@ schema.validate({
 });
 ```
 
-## Unsupported
+## Custom Features
+
+The following custom features are available.
+
+__TODO__
+
+## Unsupported Features
 
 The following from `draft-07` are **NOT SUPPORTED**:
 
