@@ -34,22 +34,15 @@ schema.validate({
     email: 'josie@example.com',
     age: 26
 });
-
-// NOTE: not yet implemented
-const schema2 = josie.object({
-        name: josie.string(2, 200).required(),
-        email: josie.email().required(),
-        age: josie.number(18, 120)
-    })
-    .additionalProperties(false)
-    .compile();
-
-schema2.validate({
-    name: 'Josie',
-    email: 'josie@example.com',
-    age: 26
-});
 ```
+
+## Unsupported
+
+The following from `draft-07` are **NOT SUPPORTED**:
+
+* keywords `contentEncoding` and `contentMediaType`
+* formats `idn-email`, `idn-hostname`, `iri`, and `iri-reference`
+* `$ref`s to remote urls
 
 ## Test
 
