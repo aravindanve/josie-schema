@@ -53,8 +53,10 @@ jst({
     // 'Advanced Tests': './tests/{**/,}*.json'
   },
   skip: [
-    'optional/content',
+    'draft7/ref',
+    'draft7/refRemote',
     'draft7/definitions',
+    'optional/content',
     'format/idn-email',
     'format/idn-hostname',
     'format/iri',
