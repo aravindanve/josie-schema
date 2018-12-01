@@ -32,41 +32,49 @@ function afterError(err) {
   // If result.passed is false the test will fails after this function returns
 }
 
-jst({
-  validate(schema, data) {
-    try {
-      josie.compile(schema).validate(data);
-      this.errors = [];
-      return true;
-
-    } catch (err) {
-      this.errors = [err];
-      return false;
-    }
-  },
-  errors: []
-
-}, {
-  description: 'Josie Schema Tests',
-  suites: {
-    'JSON-Schema-Test-Suite/draft-07': './JSON-Schema-Test-Suite/tests/draft7/{**/,}*.json',
-    // 'Advanced Tests': './tests/{**/,}*.json'
-  },
-  skip: [
-    'draft7/ref',
-    'draft7/refRemote',
-    'draft7/definitions',
-    'optional/content',
-    'format/idn-email',
-    'format/idn-hostname',
-    'format/iri',
-    'format/iri-reference',
-  ],
-  async: false,
-  afterEach,
-  afterError,
-  log: true,
-  cwd: __dirname,
-  timeout: 10000,
-  assert: chai.assert
+// add remotes
+josie.addSchemas({
+	'http://localhost:1234/integer.json': require('./JSON-Schema-Test-Suite/remotes/integer.json'),
+	'http://localhost:1234/subSchemas.json': require('./JSON-Schema-Test-Suite/remotes/subSchemas.json'),
+	'http://localhost:1234/name.json': require('./JSON-Schema-Test-Suite/remotes/name.json'),
+	'http://localhost:1234/folder/folderInteger.json': require('./JSON-Schema-Test-Suite/remotes/folder/folderInteger.json')
 });
+
+// jst({
+//   validate(schema, data) {
+//     try {
+//       josie.compile(schema).validate(data);
+//       this.errors = [];
+//       return true;
+
+//     } catch (err) {
+//       this.errors = [err];
+//       return false;
+//     }
+//   },
+//   errors: []
+
+// }, {
+//   description: 'Josie Schema Tests',
+//   suites: {
+//     'JSON-Schema-Test-Suite/draft-07': './JSON-Schema-Test-Suite/tests/draft7/{**/,}*.json',
+//     // 'Advanced Tests': './tests/{**/,}*.json'
+//   },
+//   skip: [
+//     'draft7/ref',
+//     'draft7/refRemote',
+//     'draft7/definitions',
+//     'optional/content',
+//     'format/idn-email',
+//     'format/idn-hostname',
+//     'format/iri',
+//     'format/iri-reference',
+//   ],
+//   async: false,
+//   afterEach,
+//   afterError,
+//   log: true,
+//   cwd: __dirname,
+//   timeout: 10000,
+//   assert: chai.assert
+// });
